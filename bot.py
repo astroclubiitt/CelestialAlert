@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 import os
+from app import keep_alive
 
 # Load the environment variables
 load_dotenv()
@@ -32,6 +33,6 @@ async def on_message(message):
         await message.channel.send('Hello!')
 
 
-
+keep_alive()
 # Run the Bot
 client.run(DISCORD_BOT_TOKEN)
