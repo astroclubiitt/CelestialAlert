@@ -1,0 +1,26 @@
+{
+    "cities": ["Tirupati", "Gorakhpur"],
+    "Tirupati": {
+      "city": "Tirupati",
+      "latitude": {
+        "min": 13.0,
+        "max": 14.5
+      },
+      "longitude": {
+        "min": 79.0,
+        "max": 80.5
+      }
+    },
+    "Gorakhpur": {
+      "city": "Gorakhpur",
+      "latitude": {
+        "min": 26.0,
+        "max": 27.5
+      },
+      "longitude": {
+        "min": 82.0,
+        "max": 83.5
+      }
+    }
+  }
+  
