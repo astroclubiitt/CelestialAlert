@@ -1,3 +1,38 @@
-#TODO-1: import the discord.py and os, load env and try accessing getting the message reads by the bot
+import discord
+import os
+from discord.enums import MessageType
+from dotenv import load_dotenv
 
-#TODO-2: follow the tutuial in youtube and in solution to get it work, use need to complete till app.py till L-1 (update) commit, you can take help of solution initially but do whatever u want gemini, gpt, but undersatnd how it is working.
+# Load environment variables from 'env' file
+load_dotenv('sec.env')
+
+# Get bot token from environment variable
+TOKEN = os.getenv("TOKEN")
+
+# Define intents
+intents = discord.Intents.default()
+intents.messages = True  # Enable message-related events
+intents.message_content = True #enable message content reading 
+
+# Create a bot instance with intents
+client = discord.Client(intents=intents)
+
+@client.event
+async def on_ready():
+    print('Logged in as {0.user}'.format(client))
+
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
+
+    print(f"Received message: '{message.content}'")
+
+    if message.content.startswith('$hello'):
+        await message.channel.send('Hello!')
+
+    if message.content.startswith('$bye'):
+        await message.channel.send('Goodbye!')
+
+# Run the bot with the token from the environment variable
+client.run(TOKEN)
