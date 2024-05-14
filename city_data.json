@@ -1,25 +1,37 @@
 {
-  "cities": ["Tirupati", "Gorakhpur"],
-  "Tirupati": {
-    "city": "Tirupati",
-    "latitude": {
-      "min": 13.0,
-      "max": 14.5
+    "cities": ["Tirupati", "Gorakhpur", "Test"],
+    "Tirupati": {
+      "city": "Tirupati",
+      "latitude": {
+        "min": 13.0,
+        "max": 14.5
+      },
+      "longitude": {
+        "min": 79.0,
+        "max": 80.5
+      }
     },
-    "longitude": {
-      "min": 79.0,
-      "max": 80.5
-    }
-  },
-  "Gorakhpur": {
-    "city": "Gorakhpur",
-    "latitude": {
-      "min": 26.0,
-      "max": 27.5
+    "Gorakhpur": {
+      "city": "Gorakhpur",
+      "latitude": {
+        "min": 26.0,
+        "max": 27.5
+      },
+      "longitude": {
+        "min": 82.0,
+        "max": 83.5
+      }
     },
-    "longitude": {
-      "min": 82.0,
-      "max": 83.5
+    "Test": {
+      "city": "Test",
+      "latitude": {
+        "min": -90.0,
+        "max": 90.0
+      },
+      "longitude": {
+        "min": -180.0,
+        "max": 180.0
+      }
     }
   }
-}
+  

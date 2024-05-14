@@ -241,7 +241,7 @@ class CelestialAlert(commands.Bot):
             return
 
         self.ping = False
-        self.ping_api.stop(message=message)
+        self.ping_api.stop()
         print("Ping stopped")
         await self.ping_message_template(message=message, text="**Ping Stopped**. The bot is currently **inactive**.", color=discord.Color.light_gray())
 
