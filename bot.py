@@ -54,32 +54,34 @@ class CelestialAlert(commands.Bot):
         if message.author == self.user:
             return
 
+        command = message.content.lower()
+        
         # Handle different commands
-        if message.content.lower().startswith('$home') or message.content.lower().startswith("$help"):
+        if command.startswith('$home') or message.content.lower().startswith("$help"):
             await self.home(message=message)
 
-        elif message.content.lower().startswith("$curr_city"):
+        elif command.startswith("$curr_city"):
             await self.curr_city_display(message=message)
 
-        elif message.content.lower().startswith("$avail_city"):
+        elif command.startswith("$avail_city"):
             await self.available_cities(message=message)
 
-        elif message.content.lower().startswith("$set_city"):
+        elif command.startswith("$set_city"):
             await self.set_city(message=message)
 
-        elif message.content.lower().startswith("$project_info"):
+        elif command.startswith("$project_info"):
             await self.project_info(message=message)
 
-        elif message.content.lower().startswith("$bot_config"):
+        elif command.startswith("$bot_config"):
             await self.display_bot_configuration(message=message)
 
-        elif message.content.lower().startswith("$stop_ping"):
+        elif command.startswith("$stop_ping"):
             await self.stop_ping(message=message)
 
-        elif message.content.lower().startswith("$start_ping"):
+        elif command.startswith("$start_ping"):
             await self.start_ping(message=message)
 
-        elif message.content.lower().startswith("$update_city"):
+        elif command.startswith("$update_city"):
             await self.update_city(message=message)
 
     async def home(self, message):
