@@ -6,7 +6,7 @@ app = Flask('')
 
 @app.route('/')
 def home() :
-    return "Celestial Alert Server Running"
+    return "Celestial Alert Server Running, Status: Ok(200)"
 
 def run():
     # app.debug = True 
