@@ -1,3 +1,9 @@
+# Task - 3
+
+#TODO-1: Change the whole thing to a class for better management if variables (check T-3 for it)
+#TODO-2: Push the code, and then I will tell you which function you need to make, so this is partial T-3 completion task. 
+
+
 import discord
 import os
 from dotenv import load_dotenv
