@@ -5,12 +5,14 @@ import os
 import json
 from app import keep_alive
 import datetime
+import requests
 
 # Load the environment variables
 load_dotenv()
 
 # Get bot token from environment variable
 DISCORD_BOT_TOKEN = os.getenv("TOKEN")
+API_URL = "http://api.open-notify.org/iss-now.json"
 
 # Get all cities from the JSON file
 with open(file="city_data.json", mode='r') as file:
@@ -18,6 +20,8 @@ with open(file="city_data.json", mode='r') as file:
     CITIES_AVAILABLE = data["cities"]
 
 # Custom Bot class inheriting from commands.Bot
+
+
 class CelestialAlert(commands.Bot):
     def __init__(self):
         # Initialize bot with custom intents
@@ -29,6 +33,8 @@ class CelestialAlert(commands.Bot):
         # Initialize variables
         self.curr_city = str()  # Current city the bot is configured for
         self.ping = False  # Flag to indicate whether the bot is currently pinging
+
+        # Configure variables for latittude and longitude
         self.min_latitude = float()  # Minimum latitude for the current city
         self.max_latitude = float()  # Maximum latitude for the current city
         self.min_longitude = float()  # Minimum longitude for the current city
@@ -36,6 +42,9 @@ class CelestialAlert(commands.Bot):
 
         # Date, time logs object
         self.data_time_object = datetime.datetime
+
+        # Limit ping messages to everyone, so that bot doesn't spam the server
+        self.prv_alerted_time = self.data_time_object.now()
 
     async def on_ready(self):
         print("We have logged in as {0.user}".format(self))
@@ -95,7 +104,7 @@ class CelestialAlert(commands.Bot):
                   "- **$project_info**: get project information.\n"
                   "- **$bot_config**: display bot configuration.\n"
                   "- **$stop_ping**: to pause the bot from pinging.\n"
-                  "- **$update_city**: To update the city",
+                  "- **$update_city <city>**: To update the city",
             inline=False
         )
         embed.set_footer(
@@ -220,7 +229,7 @@ class CelestialAlert(commands.Bot):
 
         # Start the ping
         self.ping = True
-        self.ping_api.start()
+        self.ping_api.start(message=message)
         print("Ping Started")
         await self.ping_message_template(message=message, text="**Ping started**. The bot is currently **active**.", color=discord.Color.brand_green())
 
@@ -232,7 +241,7 @@ class CelestialAlert(commands.Bot):
             return
 
         self.ping = False
-        self.ping_api.stop()
+        self.ping_api.stop(message=message)
         print("Ping stopped")
         await self.ping_message_template(message=message, text="**Ping Stopped**. The bot is currently **inactive**.", color=discord.Color.light_gray())
 
@@ -246,16 +255,56 @@ class CelestialAlert(commands.Bot):
         )
         await message.channel.send(embed=embed)
 
-    @tasks.loop(seconds=2)
-    async def ping_api(self):
+    @tasks.loop(seconds=5)
+    async def ping_api(self, message):
         # Loop for pinging the API
-        if self.ping is True :
+        if self.ping is True:
 
             # Note time for ping - for logs
             now = self.data_time_object.now()
             date_str = now.strftime("%d-%m-%Y")
             time_str = now.strftime("%I:%M:%S %p")
-            print(f"Pinged: {self.curr_city}, on: {date_str}, at time: {time_str}")
+
+            set_latitude = (self.min_latitude + self.max_latitude)/2
+            set_longitude = (self.min_longitude + self.max_longitude)/2
+
+            try:
+                response = requests.get(url=API_URL)
+                response.raise_for_status()  # This will raise an error for non 200 status codes
+
+                # Executed if no error occurred
+                contents = response.json()
+                if contents["message"] == "success":
+                    iss_curr_location = contents["iss_position"]
+                    await self.check_iss_proximity(iss_position=iss_curr_location, message=message, now=now)
+                    print(f"Pinged: {self.curr_city}, on: {date_str}, at time: {time_str}, my location: [{set_latitude}, {set_longitude}], iss location: {iss_curr_location}")
+
+                else:
+                    raise Exception
+
+            except requests.exceptions.HTTPError as http_err:
+                print(f"Some error occurred, HTTP code: {response.status_code}, date: {date_str}, time: {time_str}, error is: {http_err}")
+
+            except Exception as err:
+                print(f"Unkmown error occurred, date: {date_str}, time: {time_str}, error is: {err}")
+
+
+    async def check_iss_proximity(self, iss_position, message, now):
+
+        if ( self.min_latitude <= float(iss_position["latitude"]) and self.max_latitude >= float(iss_position["latitude"]) ) and  (self.min_longitude <= float(iss_position["longitude"]) and self.max_longitude >= float(iss_position["longitude"]) ):
+
+            # get time difference so that bot doesn't spam
+            time_diff = (now - self.prv_alerted_time).total_seconds()
+
+            # Send alert when ISS in range
+            if self.prv_alerted_time is not None and time_diff < 20:
+                return
+            else :
+                await self.send_alert(message=message)
+                self.prv_alerted_time = now
+
+        else:
+            return
 
     @staticmethod
     async def send_alert(message):
@@ -294,10 +343,13 @@ class CelestialAlert(commands.Bot):
             self.max_longitude = data[city]["longitude"]["max"]
 
 # Entry point of the program
+
+
 def main():
     celestial_alert = CelestialAlert()
     keep_alive()  # Keep the bot alive
     celestial_alert.run(DISCORD_BOT_TOKEN)
+
 
 # Call the main function
 main()
