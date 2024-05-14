@@ -1,9 +1,8 @@
 import discord
 import os
-from discord.enums import MessageType
 from dotenv import load_dotenv
 
-# Load environment variables from 'env' file
+# Load environment variables from 'sec.env' file
 load_dotenv('sec.env')
 
 # Get bot token from environment variable
@@ -12,7 +11,7 @@ TOKEN = os.getenv("TOKEN")
 # Define intents
 intents = discord.Intents.default()
 intents.messages = True  # Enable message-related events
-intents.message_content = True #enable message content reading 
+intents.message_content = True   # enable message content reading 
 
 # Create a bot instance with intents
 client = discord.Client(intents=intents)
