@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 from discord.ext import commands
 import json
+from app import keep_alive 
 
 with open(file="city_data.json", mode='r') as file:
     data = json.load(file)
@@ -172,4 +173,5 @@ class AstroBot(commands.Bot):
 # Example Usage:
 if __name__ == "__main__":
     bot = AstroBot()
+    keep_alive()
     bot.run()
