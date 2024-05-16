@@ -1,83 +1,68 @@
 import discord
-import os
-from dotenv import load_dotenv
 from discord.ext import commands
+from dotenv import load_dotenv
+import os
+from app import keep_alive
 import json
-from app import keep_alive 
 
+# Load the environment variables
+load_dotenv()
+
+# Get bot token from environment variable
+DISCORD_BOT_TOKEN = os.getenv("TOKEN")
+# Get all cities
 with open(file="city_data.json", mode='r') as file:
     data = json.load(file)
-    CITIES_LIST = data["cities"]
+    CITIES_AVAILABLE = data["cities"]
 
-class AstroBot(commands.Bot):
+
+class CeletialALert(commands.Bot):
     def __init__(self):
-        #super().__init__(command_prefix='$' ,intents = self.intents)
+        # Define intents
+        intents = discord.Intents.default()
+        intents.messages = True  # This is needed for the on_message event
+        intents.message_content = True   # Needed to get the messages
+        super().__init__(command_prefix='$', intents=intents)
 
         # Pinging and city configuration
         self.curr_city = str()
         self.ping = False
 
-        # Call the setup method
-        self.setup()
-
-    def setup(self):
-        # Load environment variables from 'sec.env' file
-        load_dotenv()
-
-        # Get bot token from environment variable
-        self.TOKEN = os.getenv("TOKEN")
-
-        # Define intents
-        self.intents = discord.Intents.default()
-        self.intents.messages = True  # Enable message-related events
-        self.intents.message_content = True  # enable message content reading 
-
-        # Create a bot instance with intents
-        self.client = discord.Client(intents=self.intents)
-    @property
-    def intents(self):
-        return self._intents
-
-    @intents.setter
-    def intents(self, value):
-        self._intents = value
     async def on_ready(self):
-        print('Logged in as {0.user}'.format(self.client))
+        print("We have logged in as {0.user}".format(self))
 
     async def on_message(self, message):
-        if message.author == self.client.user:
+        # Ignore if the message is from the bot itself
+        if message.author == self.user:
             return
 
-        print(f"Received message: '{message.content}'")
+        # Handle different cases
+        if message.content.lower().startswith('$home'):
+            await self.home(message=message)
 
-        if message.content.startswith('$hello'):
-            await message.channel.send('Hello!')
-
-        elif message.content.startswith('$bye'):
-            await message.channel.send('Goodbye!')
-        elif message.content.startswith('$home'):
-            await self.home(message)
         elif message.content.lower().startswith("$curr_city"):
-            await self.display_curr_city(message=message)
+            await self.curr_city_display(message=message)
+
         elif message.content.lower().startswith("$avail_city"):
             await self.available_cities(message=message)
+
         elif message.content.lower().startswith("$set_city"):
             await self.set_city(message=message)
+
         elif message.content.lower().startswith("$project_info"):
             await self.project_info(message=message)
-        elif message.content.startswith('$embed'):
-            await self.send_embed(message)
 
     async def home(self, message):
+
         # Embedded message contents
         embed = discord.Embed(
-            title="Astro Alert 🛰",
-            description="Did someone call me ? 🧐",
+            title="Celestial Alert 🛰",
+            description="Did someone called me ? 🧐",
             color=discord.Color.dark_magenta()
         )
         embed.add_field(
             name="About",
-            value="Hi i am a Celestial Bot who will spam you when International Space Station (ISS) will be over your city.",
+            value="Hi i am an Celetial Bot who spam you when International Space Station (ISS) will be over your city.",
             inline=False
         )
         embed.add_field(
@@ -92,7 +77,7 @@ class AstroBot(commands.Bot):
         # Send the message
         await message.channel.send(embed=embed)
 
-    async def display_curr_city(self, message):
+    async def curr_city_display(self, message):
 
         print(self.curr_city)
 
@@ -102,7 +87,7 @@ class AstroBot(commands.Bot):
             description = f"The current city is set to: **{self.curr_city}**"
 
         embed = discord.Embed(
-            title="Current city",
+            title="Currect city",
             description=description,
             color=discord.Color.yellow()
         )
@@ -112,9 +97,22 @@ class AstroBot(commands.Bot):
         if self.curr_city is None or self.curr_city == "":
             await self.home(message=message)
 
+    @staticmethod
+    async def available_cities(message):
+
+        cities = ', '.join(CITIES_AVAILABLE)
+
+        embed = discord.Embed(
+            title="Available Cities",
+            description=f"Names of cities supported are: {cities}.",
+            color=discord.Color.dark_green()
+        )
+
+        await message.channel.send(embed=embed)
+
     async def set_city(self, message):
-       #assuming there exists a space
-        if message.content.split(" ")[1] in CITIES_LIST:
+
+        if message.content.split(" ")[1] in CITIES_AVAILABLE:
             self.curr_city = message.content.split(" ")[1]
             await self.curr_city_display(message=message)
 
@@ -126,20 +124,8 @@ class AstroBot(commands.Bot):
         pass
 
     @staticmethod
-    async def available_cities(message):
-
-        cities = ', '.join(CITIES_LIST)
-
-        embed = discord.Embed(
-            title="Available Cities",
-            description=f"Names of cities available in the database are: {cities}.",
-            color=discord.Color.blue()
-        )
-
-        await message.channel.send(embed=embed)
-
-    @staticmethod
     async def show_error(message, text):
+
         embed = discord.Embed(
             title="Error",
             description=text,
@@ -150,28 +136,22 @@ class AstroBot(commands.Bot):
 
     @staticmethod
     async def project_info(message):
-        embed = discord.Embed(
-            title="Project Info",
-            description=f"Find the project at: https://github.com/scienmanas",
-            color=discord.Color.pink()
-        )
 
-        await message.channel.send(embed=embed)
+        # To be update
+        await message.channel.send(f"Find the project at: https://github.com/scienmanas")
 
-    def run(self):
-        @self.client.event
-        async def on_ready():
-            await self.on_ready()
 
-        @self.client.event
-        async def on_message(message):
-            await self.on_message(message)
-
-        # Run the bot with the token from the environment variable
-        self.client.run(self.TOKEN)
-
-# Example Usage:
-if __name__ == "__main__":
-    bot = AstroBot()
+def main():
+    celetial_alert = CeletialALert()
     keep_alive()
-    bot.run()
+    celetial_alert.run(DISCORD_BOT_TOKEN)
+
+
+main()
+
+#TODO-1: See the function in T-4 (solution branch), maybe you can write or just copy it as you make some function in previous task, no you already know it, no need to repeat same thing, but after copying that take a look at the functions how new functions are working. After copying whole code, remove ping_api function, start and stop ping functions also, coding snd understand that is learning outcome of this task.
+
+#TODO-2: make ping functon use @tasks.loop and start stop it based on command. The major thing you need to understand here is how we are using @tasks.loop decorator, we can start a task and end a task by using start and stop in calling. One more thing to note here is the task is not stopped until it is finished and that's the reason we will use self.ping variable, to eliminate unneccessay pinging when city is updated or ping is stopped. 
+
+## Addtional comments: After doing this we will be pretty much done with everything, in next tasks just some enchancemnerts and api url which will be oinged will be done. So you make give time in this and understand it fully. This will help you to code your own bot speedily in future. Good luck.
+
