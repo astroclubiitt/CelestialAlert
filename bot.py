@@ -41,6 +41,7 @@ class AstroBot(commands.Bot):
     @intents.setter
     def intents(self, value):
         self._intents = value
+        
     async def on_ready(self):
         print('Logged in as {0.user}'.format(self.client))
 
