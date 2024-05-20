@@ -55,7 +55,7 @@ class CelestialAlert(commands.Bot):
             return
 
         command = message.content.lower()
-        
+
         # Handle different commands
         if command.startswith('$home') or message.content.lower().startswith("$help"):
             await self.home(message=message)
@@ -178,19 +178,30 @@ class CelestialAlert(commands.Bot):
         city = message.content.split(" ")[1]
 
         if city in CITIES_AVAILABLE:
+
             # Instantaneously stop current ping
-            self.ping = False
-            self.ping_api.stop()
-            self.ping_api.cancel()
-            
+            if self.ping is False:
 
-            # Change the configuration
-            self.curr_city = message.content.split(" ")[1]
-            self.configure_latitude_and_longitude(self.curr_city)
+                # Change the configuration
+                self.curr_city = message.content.split(" ")[1]
+                self.configure_latitude_and_longitude(self.curr_city)
 
-            # Start pinging again after configuration is updated
-            self.ping = True
-            self.ping_api.start(message=message)
+                # Start the ping
+                print("Pinged start")
+                
+                self.ping = True
+                self.ping_api.start(message=message)
+
+            else:
+                # Stop the current ping
+                self.ping = False
+
+                # Change the configuration
+                self.curr_city = message.content.split(" ")[1]
+                self.configure_latitude_and_longitude(self.curr_city)
+
+                # Start the ping again
+                self.ping = True
 
             # Embedded message
             embed = discord.Embed(
@@ -284,21 +295,23 @@ class CelestialAlert(commands.Bot):
                 if contents["message"] == "success":
                     iss_curr_location = contents["iss_position"]
                     await self.check_iss_proximity(iss_position=iss_curr_location, message=message, now=now)
-                    print(f"Pinged: {self.curr_city}, on: {date_str}, at time: {time_str}, my location: [{set_latitude}, {set_longitude}], iss location: {iss_curr_location}")
+                    print(
+                        f"Pinged: {self.curr_city}, on: {date_str}, at time: {time_str}, my location: [{set_latitude}, {set_longitude}], iss location: {iss_curr_location}")
 
                 else:
                     raise Exception
 
             except requests.exceptions.HTTPError as http_err:
-                print(f"Some error occurred, HTTP code: {response.status_code}, date: {date_str}, time: {time_str}, error is: {http_err}")
+                print(
+                    f"Some error occurred, HTTP code: {response.status_code}, date: {date_str}, time: {time_str}, error is: {http_err}")
 
             except Exception as err:
-                print(f"Unkmown error occurred, date: {date_str}, time: {time_str}, error is: {err}")
-
+                print(
+                    f"Unkmown error occurred, date: {date_str}, time: {time_str}, error is: {err}")
 
     async def check_iss_proximity(self, iss_position, message, now):
 
-        if ( self.min_latitude <= float(iss_position["latitude"]) and self.max_latitude >= float(iss_position["latitude"]) ) and  (self.min_longitude <= float(iss_position["longitude"]) and self.max_longitude >= float(iss_position["longitude"]) ):
+        if (self.min_latitude <= float(iss_position["latitude"]) and self.max_latitude >= float(iss_position["latitude"])) and (self.min_longitude <= float(iss_position["longitude"]) and self.max_longitude >= float(iss_position["longitude"])):
 
             # get time difference so that bot doesn't spam
             time_diff = (now - self.prv_alerted_time).total_seconds()
@@ -306,7 +319,7 @@ class CelestialAlert(commands.Bot):
             # Send alert when ISS in range
             if self.prv_alerted_time is not None and time_diff < 20:
                 return
-            else :
+            else:
                 await self.send_alert(message=message)
                 self.prv_alerted_time = now
 
