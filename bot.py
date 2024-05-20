@@ -3,7 +3,6 @@ from discord.ext import commands, tasks
 from dotenv import load_dotenv
 import os
 import json
-from app import keep_alive
 import datetime
 import requests
 
@@ -367,7 +366,6 @@ class CelestialAlert(commands.Bot):
 
 def main():
     celestial_alert = CelestialAlert()
-    keep_alive()  # Keep the bot alive
     celestial_alert.run(DISCORD_BOT_TOKEN)
 
 
