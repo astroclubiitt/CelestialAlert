@@ -14,7 +14,8 @@
     "London",
     "Sydney",
     "Paris",
-    "Singapore"
+    "Singapore",
+    "Test"
   ],
 
   "Tirupati": {
@@ -180,6 +181,17 @@
     "longitude": {
       "min": 103.6,
       "max": 104.0
+    }
+  },
+  "Test": {
+    "city": "Test",
+    "latitude": {
+      "min": -90,
+      "max": 90
+    },
+    "longitude": {
+      "min": -180,
+      "max": 180
     }
   }
 }
