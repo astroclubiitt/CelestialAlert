@@ -1,0 +1,185 @@
+{
+  "cities": [
+    "Tirupati",
+    "Gorakhpur",
+    "Delhi",
+    "Kanpur",
+    "Kaharjpur",
+    "Mumbai",
+    "Bengaluru",
+    "Chennai",
+    "Kolkata",
+    "Hyderabad",
+    "Tokyo",
+    "London",
+    "Sydney",
+    "Paris",
+    "Singapore"
+  ],
+
+  "Tirupati": {
+    "city": "Tirupati",
+    "latitude": {
+      "min": 13.0,
+      "max": 14.5
+    },
+    "longitude": {
+      "min": 79.0,
+      "max": 80.5
+    }
+  },
+  "Gorakhpur": {
+    "city": "Gorakhpur",
+    "latitude": {
+      "min": 26.0,
+      "max": 27.5
+    },
+    "longitude": {
+      "min": 82.0,
+      "max": 83.5
+    }
+  },
+  "Delhi": {
+    "city": "Delhi",
+    "latitude": {
+      "min": 28.0,
+      "max": 29.0
+    },
+    "longitude": {
+      "min": 76.5,
+      "max": 77.5
+    }
+  },
+  "Kanpur": {
+    "city": "Kanpur",
+    "latitude": {
+      "min": 26.0,
+      "max": 27.0
+    },
+    "longitude": {
+      "min": 80.0,
+      "max": 81.0
+    }
+  },
+  "Kaharjpur": {
+    "city": "Kaharjpur",
+    "latitude": {
+      "min": 23.0,
+      "max": 24.0
+    },
+    "longitude": {
+      "min": 85.0,
+      "max": 86.0
+    }
+  },
+  "Mumbai": {
+    "city": "Mumbai",
+    "latitude": {
+      "min": 18.0,
+      "max": 20.0
+    },
+    "longitude": {
+      "min": 72.0,
+      "max": 73.0
+    }
+  },
+  "Bengaluru": {
+    "city": "Bengaluru",
+    "latitude": {
+      "min": 12.5,
+      "max": 13.5
+    },
+    "longitude": {
+      "min": 77.0,
+      "max": 78.0
+    }
+  },
+  "Chennai": {
+    "city": "Chennai",
+    "latitude": {
+      "min": 12.5,
+      "max": 13.5
+    },
+    "longitude": {
+      "min": 79.5,
+      "max": 80.5
+    }
+  },
+  "Kolkata": {
+    "city": "Kolkata",
+    "latitude": {
+      "min": 22.0,
+      "max": 23.0
+    },
+    "longitude": {
+      "min": 88.0,
+      "max": 89.0
+    }
+  },
+  "Hyderabad": {
+    "city": "Hyderabad",
+    "latitude": {
+      "min": 17.0,
+      "max": 18.0
+    },
+    "longitude": {
+      "min": 78.0,
+      "max": 79.0
+    }
+  },
+  "Tokyo": {
+    "city": "Tokyo",
+    "latitude": {
+      "min": 35.0,
+      "max": 36.0
+    },
+    "longitude": {
+      "min": 139.0,
+      "max": 140.0
+    }
+  },
+  "London": {
+    "city": "London",
+    "latitude": {
+      "min": 51.0,
+      "max": 52.0
+    },
+    "longitude": {
+      "min": -0.5,
+      "max": 0.5
+    }
+  },
+  "Sydney": {
+    "city": "Sydney",
+    "latitude": {
+      "min": -34.0,
+      "max": -33.0
+    },
+    "longitude": {
+      "min": 150.5,
+      "max": 151.5
+    }
+  },
+  "Paris": {
+    "city": "Paris",
+    "latitude": {
+      "min": 48.8,
+      "max": 48.9
+    },
+    "longitude": {
+      "min": 2.2,
+      "max": 2.4
+    }
+  },
+  "Singapore": {
+    "city": "Singapore",
+    "latitude": {
+      "min": 1.2,
+      "max": 1.5
+    },
+    "longitude": {
+      "min": 103.6,
+      "max": 104.0
+    }
+  }
+}
