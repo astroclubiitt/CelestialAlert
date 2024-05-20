@@ -180,13 +180,17 @@ class CelestialAlert(commands.Bot):
         if city in CITIES_AVAILABLE:
             # Instantaneously stop current ping
             self.ping = False
+            self.ping_api.stop()
+            self.ping_api.cancel()
+            
 
             # Change the configuration
             self.curr_city = message.content.split(" ")[1]
             self.configure_latitude_and_longitude(self.curr_city)
 
             # Start pinging again after configuration is updated
-            #self.ping = True
+            self.ping = True
+            self.ping_api.start(message=message)
 
             # Embedded message
             embed = discord.Embed(
@@ -243,6 +247,7 @@ class CelestialAlert(commands.Bot):
             return
 
         self.ping = False
+        self.ping_api.cancel()
         self.ping_api.stop()
         print("Ping stopped")
         await self.ping_message_template(message=message, text="**Ping Stopped**. The bot is currently **inactive**.", color=discord.Color.light_gray())
