@@ -13,6 +13,7 @@ load_dotenv()
 DISCORD_BOT_TOKEN = os.getenv("TOKEN")
 CHANNEL_ID = int(os.getenv("CHANNEL_ID"))
 API_URL = "http://api.open-notify.org/iss-now.json"
+PROJECT_URL = "https://github.com/astroclubiitt/CelestialAlert"
 
 # Get all cities from the JSON file
 with open(file="city_data.json", mode='r') as file:
@@ -353,7 +354,7 @@ class CelestialAlert(commands.Bot):
     @staticmethod
     async def project_info(message):
         # Display project information
-        await message.channel.send(f"Find the project at: https://github.com/scienmanas")
+        await message.channel.send(f"Find the project at: {PROJECT_URL}")
 
     def configure_latitude_and_longitude(self, city):
         # Configure latitude and longitude for the given city
