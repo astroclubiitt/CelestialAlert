@@ -1,6 +1,6 @@
 # ISS-checker-bot
 
-![Logo](https://raw.githubusercontent.com/scienmanas/CelestialAlert/45e9b4a30dd23b2b36b96bd5a8f4b163c97426e8/assets/logo.png)
+![Logo](https://raw.githubusercontent.com/astroclubiitt/CelestialAlert/main/assets/logo.png)
 
 This is a discord bot developed for Gagan Vedhi Club server, the Astronomy club of Indian Institute of Technology, Tirupati. The bot checks the current location of the `International Space Station` periodically every 5 seconds and ping the server memebers when the ISS is in close promixity of the city.
 
@@ -24,6 +24,7 @@ pip install -r requirements.txt
 
 ```bash
 TOKEN=YOUT_DISCORD_BOT_TOKEN
+CHANNEL_ID=Channel id in which you want the bot to prompt
 ```
 
 5. In Testing/debugging phase :
@@ -35,8 +36,16 @@ python bot.py
 ## Deployment:
 
 1. You can deploy the bot in a virtual private server or in a cloud platform like Heroku, AWS, etc.
-
-To be updates
+2. This bot is deployed on render and cron-jobs is used to monitor the uptime.
+3. To deployt in render:
+   - `build command`:
+     - ```bash
+       ./build.sh
+       ```
+   - `run command`:
+     - ```bash
+       python main.py
+       ```
 
 ## Features:
 
@@ -54,7 +63,7 @@ To be updates
 
 ## Citties Available:
  
-- Tirupati, Gorakhpur.
+-  Tirupati, Gorakhpur, Delhi, Kanpur, Kaharjpur, Mumbai, Bengaluru, Chennai, Kolkata, Hyderabad, Tokyo, London, Sydney, Paris, Singapore.
 
 ## Note: 
 
@@ -62,7 +71,7 @@ To be updates
 
 - Enable the intents so that it can read message events.
 
-<Isnser pic here>
+![Permissions](https://raw.githubusercontent.com/astroclubiitt/CelestialAlert/main/assets/permissions.png)
 
 ## Folder Structure:
 
@@ -74,8 +83,10 @@ To be updates
 │── .env
 │    ├── TOKEN=Your Discord Bot Token
 ├── .gitignore
+├── main.py
 ├── app.py 
 ├── bot.py
+├── Procfile
 ├── LICENSE
 ├── README.md
 └── requirements.txt
