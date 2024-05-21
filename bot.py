@@ -187,7 +187,7 @@ class CelestialAlert(commands.Bot):
 
                 # Start the ping
                 print("Pinged start")
-                
+
                 self.ping = True
                 self.ping_api.start(message=message)
 
@@ -245,9 +245,9 @@ class CelestialAlert(commands.Bot):
 
         # Start the ping
         self.ping = True
-        self.ping_api.start(message=message)
         print("Ping Started")
         await self.ping_message_template(message=message, text="**Ping started**. The bot is currently **active**.", color=discord.Color.brand_green())
+        self.ping_api.start(message=message)
 
     async def stop_ping(self, message):
         # Stop pinging the API
@@ -330,10 +330,10 @@ class CelestialAlert(commands.Bot):
         # Send alert message about ISS passing
         embed = discord.Embed(
             title="Look up the sky 😲",
-            description=f"@everyone The **International Space Station** (ISS) is passing above the city. Grab your equipment and take a look! 😅.",
+            description="The **International Space Station** (ISS) is passing above the city. Grab your equipment and take a look! 😅.",
             color=discord.Color.dark_gold()
         )
-        await message.channel.send(embed=embed)
+        await message.channel.send(content='@everyone Look up the sky! 🌌', embed=embed)
 
     @staticmethod
     async def show_error(message, text):
