@@ -40,7 +40,7 @@ python bot.py
 3. To deployt in render:
    - `build command`:
      - ```bash
-       pip install -r requiremets.txt
+       ./build.sh
        ```
    - `run command`:
      - ```bash
