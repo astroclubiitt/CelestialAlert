@@ -1,4 +1,4 @@
-# ISS-checker-bot
+# Celestial Alert
 
 ![Logo](https://raw.githubusercontent.com/astroclubiitt/CelestialAlert/main/assets/logo.png)
 
