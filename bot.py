@@ -11,6 +11,7 @@ load_dotenv()
 
 # Get bot token from environment variable
 DISCORD_BOT_TOKEN = os.getenv("TOKEN")
+CHANNEL_ID = int(os.getenv("CHANNEL_ID"))
 API_URL = "http://api.open-notify.org/iss-now.json"
 
 # Get all cities from the JSON file
@@ -18,8 +19,8 @@ with open(file="city_data.json", mode='r') as file:
     data = json.load(file)
     CITIES_AVAILABLE = data["cities"]
 
-# Custom Bot class inheriting from commands.Bot
 
+# Custom Bot class inheriting from commands.Bot
 
 class CelestialAlert(commands.Bot):
     def __init__(self):
@@ -319,21 +320,25 @@ class CelestialAlert(commands.Bot):
             if self.prv_alerted_time is not None and time_diff < 20:
                 return
             else:
-                await self.send_alert(message=message)
+                await self.send_alert()
                 self.prv_alerted_time = now
 
         else:
             return
 
-    @staticmethod
-    async def send_alert(message):
+    # @staticmethod
+    async def send_alert(self):
         # Send alert message about ISS passing
+
+        channel = self.get_channel(CHANNEL_ID)
+
         embed = discord.Embed(
             title="Look up the sky 😲",
             description="The **International Space Station** (ISS) is passing above the city. Grab your equipment and take a look! 😅.",
             color=discord.Color.dark_gold()
         )
-        await message.channel.send(content='@everyone Look up the sky! 🌌', embed=embed)
+        await channel.send(content='@everyone Look up the sky! 🌌', embed=embed)
+        print("Alerted")
 
     @staticmethod
     async def show_error(message, text):
