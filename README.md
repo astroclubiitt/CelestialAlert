@@ -86,6 +86,7 @@ python bot.py
 ├── main.py
 ├── app.py 
 ├── bot.py
+├── build.sh
 ├── Procfile
 ├── LICENSE
 ├── README.md
