@@ -1,18 +1,32 @@
-from threading import Thread
+from fastapi import FastAPI
+from bot import start_bot
+import threading
+import uvicorn
 import os
+from contextlib import asynccontextmanager
 
-# Function to run the Flask server with gunicorn
-def run_flask():
-    os.system("gunicorn app:app --workers 4 --bind 0.0.0.0:8000")
+# Define startup event
 
-# Function to run the Discord bot
-def run_discord_bot():
-    os.system("python bot.py")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Start the bot in a separate thread
+    bot_thread = threading.Thread(target=start_bot)
+    bot_thread.start()
+
+    # Yield control back to FastAPI
+    yield
+
+
+# Make a fast api app
+app = FastAPI(lifespan=lifespan)
+
+
+@app.get("/")
+def read_root():
+    return {"message": "Server is running and Celestial is alive :)"}
+
 
 if __name__ == "__main__":
-    # Start the Flask server in a separate thread
-    flask_thread = Thread(target=run_flask)
-    flask_thread.start()
-
-    # Start the Discord bot in the main thread
-    run_discord_bot()
+    port = int(os.environ.get("PORT", 8000))  # Use environment variable PORT if available
+    uvicorn.run("main:app", host="0.0.0.0", port=port, log_level="info", reload=False)

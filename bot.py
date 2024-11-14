@@ -370,11 +370,11 @@ class CelestialAlert(commands.Bot):
 # Entry point of the program
 
 
-def main():
+def start_bot():
     celestial_alert = CelestialAlert()
     celestial_alert.run(DISCORD_BOT_TOKEN)
 
 
 # Call the main function
 if __name__ == "__main__":
-    main()
+    start_bot()
